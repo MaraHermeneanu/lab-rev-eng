@@ -1,0 +1,28 @@
+1. Run the program once and take note of any strings. Go to the .rodata segment (Ctrl-s) and find
+any/all of the strings. Using the xref functionality, determine where the main() function is. (1p)
+
+rodata -> xref string "Please input..." -> sub_401DE7  (main) -> xref to start
+
+36
+39
+46
+32
+61
+2B
+31
+38
+64
+33
+34
+36
+62
+2F
+53
+51
+35
+63
+36
+35
+65
+
+69F2a+18d346b/SQ5c65e
