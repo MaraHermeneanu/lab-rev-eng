@@ -1,0 +1,15 @@
+--- SIGSEGV (Segmentation fault) ---
+memset(0x8625ae8, '\0', 10000)                   = 0x8625ae8
+--- SIGSEGV (Segmentation fault) ---
+fgets("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"..., 10000, 0xf7f9b760) = 0x8625ae8
+--- SIGSEGV (Segmentation fault) ---
+strlen("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"...)    = 71
+--- SIGILL (Illegal instruction) ---
+--- SIGSEGV (Segmentation fault) ---
+strstr("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"..., "zihldazjcn") = nil
+--- SIGSEGV (Segmentation fault) ---
+puts("WROOONG!")                                 = 9
+--- SIGILL (Illegal instruction) ---
+--- SIGSEGV (Segmentation fault) ---
+exit(1 <no return ...>
++++ exited (status 1) +++
