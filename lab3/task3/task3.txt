@@ -1,0 +1,14 @@
+1. Use the Structures tab and create the following list structure (also declare field 8 next as a
+struc 1* pointer) (2p)
+
+Ghidra -> right click create struct as
+2. In main(), cast the buffer returned from malloc and the head of the list to this struct type and
+propagate in the password checking function, renaming and retyping where necessary. (2p)
+3. Describe what the code does and figure out the correct password. (2p)
+
+Create a link list containing the alphabet backwards - from {, ascii 123, idx 26 to b, ascii 98, idx 1
+The password check looks at the first 5 characters from the user input and traverses the linked list 
+If a matching character is found the index gets saved -> later on checked against the right password character index (character idx + 97) which we can already see in the program
+
+
+unibuc

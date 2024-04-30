@@ -1,0 +1,44 @@
+1. Run the program once and take note of any strings. Go to the .rodata segment (Ctrl-s) and find
+any/all of the strings. Using the xref functionality, determine where the main() function is. (1p)
+
+rodata -> xref string "Please input..." -> sub_401DE7  (main) -> xref to start
+
+
+2. Rename all the functions in main() and determine the password-checking function. (1p)
+3. In the password-checking function, observe how the correct password is generated; we want to
+make this function more readable.
+
+4.Go to the location of any word ..... variable in IDA-view and find the location of the start of the
+alphabet and redeclare that address as a wide C string (Edit→Strings→Unicode).
+
+5. Again, in the password checking function, observe how the right-hand side looks now. Redeclare
+the alphabet with the “const” modifier at the beginning. This should collapse the function and
+reveal the correct password. Finally, check that the password is accepted. (2p)
+
+Ghidra -> .data -> right click Daya -> unicode -> settings -> mutability
+Hex to text
+36 -> 6
+39 -> 9
+46 -> F
+32
+61
+2B
+31
+38
+64
+33
+34
+36
+62
+2F
+53
+51
+35
+63
+36
+35
+65
+
+69F2a+18d346b/SQ5c65e
+
+

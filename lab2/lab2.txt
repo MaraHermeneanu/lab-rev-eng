@@ -8,7 +8,18 @@ LAB 2
 
 // Counts the number of non-zero bytes in a null-terminated string pointed to by the rdi register, and returns the count
 
-myst2:	cmp BYTE PTR [rdi], 0  		;check if the byte pointed to by rdi = 0 - rdi -> function argument	je .L4 					;if equal jump to L4	mov eax, 0 				;move the value 0 into the eax  - init counter - rax/eax -> return value .L3:	add rax, 1 				;increment the value in rax by 1 - increment counter	cmp BYTE PTR [rdi+rax], 0 	;compare byte at the memory address calculated by adding the value in rax to the memory address stored in rdi with 0 - check the byte at the next memory location 	jne .L3 					;if not equal jump to L3	ret						;return .L4:	mov eax, 0 				;move the value 0 into the eax  - init counter	ret  						;return 
+myst2:
+	cmp BYTE PTR [rdi], 0  		;check if the byte pointed to by rdi = 0 - rdi -> function argument
+	je .L4 					;if equal jump to L4
+	mov eax, 0 				;move the value 0 into the eax  - init counter - rax/eax -> return value 
+.L3:
+	add rax, 1 				;increment the value in rax by 1 - increment counter
+	cmp BYTE PTR [rdi+rax], 0 	;compare byte at the memory address calculated by adding the value in rax to the memory address stored in rdi with 0 - check the byte at the next memory location 
+	jne .L3 					;if not equal jump to L3
+	ret						;return 
+.L4:
+	mov eax, 0 				;move the value 0 into the eax  - init counter
+	ret  						;return 
 
 
 C version:
@@ -33,7 +44,27 @@ int myst2(const char *str) {
 3.2. Assembly source code 2 (3p)
 
 // Fibonacci sequence calculation
-myst4:	push rbp	push rbx 				;push the values of the rbp and rbx registers onto the stack - preserve the values of these registers as they will be modified within the function	sub rsp, 8	 			;subtract 8 bytes from the stack pointer rsp - make space for			mov rbx, rdi 			;copy the value of the rdi into rbx	cmp rdi, 1				;compare the value in rdi with 1	ja .L4 				;if rdi > 1 jump to L4 .L2:	mov rax, rbx 			;copies the value of rbx into rax	add rsp, 8 			;add 8 bytes to the stack pointer rsp 	pop rbx 				;restore the values of the rbx and rbp	pop rbp	ret.L4:    	lea rdi, [rdi-1] 			;decrement the value in the rdi by 1	call myst4 			;recursive call	mov rbp, rax 			;move return value of the recursive call (rax) into the rbp	lea rdi, [rbx-2] 			;compute the address [rbx-2] and load it into the rdi	call myst4 			;recursive call	lea rbx, [rbp+0+rax] 	;compute the address [rbp+0+rax] and load it into the rbx	jmp .L2  				;jump back to the L2 label - loop until the condition 'cmp rdi, 1' is no longer true
+myst4:
+	push rbp
+	push rbx 				;push the values of the rbp and rbx registers onto the stack - preserve the values of these registers as they will be modified within the function
+	sub rsp, 8	 			;subtract 8 bytes from the stack pointer rsp - make space 	
+	mov rbx, rdi 			;copy the value of the rdi into rbx
+	cmp rdi, 1				;compare the value in rdi with 1
+	ja .L4 				;if rdi > 1 jump to L4 
+.L2:
+	mov rax, rbx 			;copies the value of rbx into rax
+	add rsp, 8 			;add 8 bytes to the stack pointer rsp 
+	pop rbx 				;restore the values of the rbx and rbp
+	pop rbp
+	ret
+.L4:    
+	lea rdi, [rdi-1] 			;decrement the value in the rdi by 1
+	call myst4 			;recursive call
+	mov rbp, rax 			;move return value of the recursive call (rax) into the rbp
+	lea rdi, [rbx-2] 			;compute the address [rbx-2] and load it into the rdi
+	call myst4 			;recursive call
+	lea rbx, [rbp+0+rax] 	;compute the address [rbp+0+rax] and load it into the rbx
+	jmp .L2  				;jump back to the L2 label - loop until the condition 'cmp rdi, 1' is no longer true
 
 
 C version:
@@ -51,40 +82,59 @@ unsigned long myst4(unsigned long n) {
 
 
 
-
 3.3. Assembly source code 3 (5p)
 
 
 // Check if prime
-myst5:	xor eax, eax		;set the eax register to zero	cmp rdi, 1			;compare the value in the rdi register with 1	jbe .L1			;if rdi <= 1 jump to L1	cmp rdi, 3			;compare the value in the rdi register with 3	jbe .L6			;if rdi <= 3 jump to L6	test dil, 1			;test the lowest bit of the dil (low 8 bits of rdi) for 1	je .L1			;if result is zero (the lowest bit is not set) jump to L1	mov ecx, 2		;lowest bit of rdi is set -> set ecx to 2 and jump to L3	jmp .L3.L4:	mov rax, rdi		;divide the value in rdi by the value in rcx (which is 2 initially) -> quotient is stored in rax and remainder is stored in rdx	xor edx, edx	div rcx	test rdx, rdx		;test if the remainder (in rdx) is zero -> rdi is divisible by rcx -> if equal to 0 jump to L8	je .L8.L3:	add rcx, 1			;increment rcx by 1, multiply rcx by rcx and store the result in rax	mov rax, rcx	imul rax, rcx	cmp rax, rdi		;compare the value in rax (the square of rcx) with the value in rdi	jbe .L4			;if rax <= rdi jump to L4.L6:	mov eax, 1		;rdi <=3 -> set eax to 1	ret				;return.L8:	xor eax, eax		;rdi not divisible by 2 -> set eax to 0.L1:	ret
+myst5:
+	xor eax, eax		;set the eax register to zero
+	cmp rdi, 1			;compare the value in the rdi register with 1
+	jbe .L1			;if rdi <= 1 jump to L1
+	cmp rdi, 3			;compare the value in the rdi register with 3
+	jbe .L6			;if rdi <= 3 jump to L6
+	test dil, 1			;test the lowest bit of the dil (low 8 bits of rdi) for 1
+	je .L1			;if result is zero (the lowest bit is not set) -> even number -> jump to L1
+	mov ecx, 2		;lowest bit of rdi is set -> set ecx to 2 and jump to L3
+	jmp .L3
+.L4:
+	mov rax, rdi		;divide the value in rdi by the value in rcx (which is 2 initially) -> quotient is stored in rax and remainder is stored in rdx
+	xor edx, edx
+	div rcx
+	test rdx, rdx		;test if the remainder (in rdx) is zero -> rdi is divisible by rcx -> jump to L8
+	je .L8
+.L3:
+	add rcx, 1			;increment rcx by 1, multiply rcx by rcx and store the result in rax
+	mov rax, rcx
+	imul rax, rcx
+	cmp rax, rdi		;compare the value in rax (the square of rcx) with the value in rdi
+	jbe .L4			;if rax <= rdi jump to L4
+.L6:
+	mov eax, 1		;rdi <=3 -> set eax to 1
+	ret				;return
+.L8:
+	xor eax, eax		;rdi divisible by rcx-> set eax to 0
+.L1:
+	ret
 
 
 C version:
 #include <stdint.h>
 
 int myst5(unsigned long  n) {
-    int result = 0;
 
-    if (n > 1) {
-        if (n <= 3)
-            return 1;
+    if (n <=1 ) return 0;
+    if (n <= 3) return 1;
+    if (n%2 == 0) return 0;
 
-        if (n & 1)
-            return 0;
-
-        int divisor = 2;
-        while (1) {
-            if (n % divisor == 0) {
-                result = 1;
-                break;
-            }
+    int divisor = 2;
+    while (1) {
+            if (n % divisor == 0)  return 0;
+          
             divisor++;
-            if (divisor * divisor > n)
-                break;
-        }
-    }
 
-    return result;
+            if (divisor * divisor > n) break;
+        }
+    return 1;
 }
 
 
@@ -94,7 +144,13 @@ int myst5(unsigned long  n) {
 4. Bonus task 1 (2p)
 Find out and explain what the following code is doing:
 
-my_function:	movabs rdx, -1085102592571150095 	;move the immediate 64-bit value -1085102592571150095 into the rdx register	mov rax, rdi						;move the value of rdi into rax	mul rdx							;multiply the value in rax by the value in rdx	mov rax, rdx						;move the value from rdx to rax -> place the upper 64 bits of the multiplication result into rax	shr rax, 4							;right shift operation on rax register by 4 bits -> divide the multiplication result by 2^4	ret								;return -> check rax 
+my_function:
+	movabs rdx, -1085102592571150095 	;move the immediate 64-bit value -1085102592571150095 into the rdx register
+	mov rax, rdi						;move the value of rdi into rax
+	mul rdx							;multiply the value in rax by the value in rdx
+	mov rax, rdx						;move the value from rdx to rax -> place the upper 64 bits of the multiplication result into rax
+	shr rax, 4							;right shift operation on rax register by 4 bits -> divide the multiplication result by 2^4
+	ret								;return -> check rax 
 
 
 C version:
@@ -111,6 +167,22 @@ unsigned long my_function(unsigned long input) {
 
 5. Bonus task 2 (2p)
 
-Take the last piece of code presented in Section 2, write the C program on your computer and compileit with gcc. Edit the binary file (not the source code!) to make it print Correct! when the wrong secretvalue is given and vice-versa.
+Take the last piece of code presented in Section 2, write the C program on your computer and compile
+it with gcc. Edit the binary file (not the source code!) to make it print Correct! when the wrong secret
+value is given and vice-versa.
 
-Password checking code:#include <stdio.h>#include <stdint.h>int main(){	uint64_t secret_value = 0xdeadc0de;	uint64_t user_input;	scanf("%lld", &user_input);	user_input ^= 0x1337cafe;	if (user_input == secret_value)		puts("Correct!");	else		puts("Wrong");	return 0;}
+Password checking code:
+#include <stdio.h>
+#include <stdint.h>
+int main()
+{
+	uint64_t secret_value = 0xdeadc0de;
+	uint64_t user_input;
+	scanf("%lld", &user_input);
+	user_input ^= 0x1337cafe;
+	if (user_input == secret_value)
+		puts("Correct!");
+	else
+		puts("Wrong");
+	return 0;
+}
